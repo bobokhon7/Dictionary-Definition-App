@@ -5,3 +5,11 @@
 .message {
   margin-top: 50px;
 }
+
+.dictionary {
+  font-size: 40px;
+}
+
+#myword {
+  border: rgb(0, 225, 255) solid;
+}
