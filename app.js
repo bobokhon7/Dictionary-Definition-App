@@ -1,6 +1,8 @@
 const searchBtn = document.getElementById("searchBtn");
 const myWord = document.getElementById("myword");
 
+document.querySelector("body").addEventListener("click", removeBox);
+
 const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 searchBtn.addEventListener("click", findWord);
@@ -21,7 +23,11 @@ function findWord(e) {
   getTranslation(word)
     .then((response) => {
       if (response.status !== 200) {
-        alert("Not Found, please write again");
+        // alert("Not Found, please write again");
+        document.querySelector("#output").innerHTML = `
+        <article class="message is-danger">
+        <div class="message-body">Not Found, please try again</div></article>
+      `;
         throw Error(response.statusText);
       } else {
         return response.json();
@@ -29,58 +35,32 @@ function findWord(e) {
     })
     .then((translation) => {
       console.log({ translation });
-      let output = `<div class="message-body">
+      let output = `<article class="message is-primary">
+      <div class="message-header">
+        <p>Word Info</p>
+        <button class="delete"></button>
+      </div>
+      <div class="message-body">
         <ul>
-          <li><strong></strong>${translation[0].word}</li>
-          <li><strong></strong>${translation[0].meanings[0].definitions[0].definition}</li>
+          <li><strong>word: </strong>${translation[0].word}</li>
+          <li><strong>Defintion: </strong>${translation[0].meanings[0].definitions[0].definition}</li>
+          <li><strong>Example: </strong>${translation[0].meanings[0].definitions[0].example}</li>
+         
         </ul>
-      </div>`;
+      </div>
+    </article>`;
+
       document.querySelector("#output").innerHTML = output;
     });
 
-  // fetch(`${baseURL}/${word}`)
-  //   .then((response) => {
-  //     if (response.status != 200) {
-  //       //   document.querySelector("#output").innerHTML = `
-  //       //   <article class="message is-danger">
-  //       //   <div class="message-body">Not Found, please try again</div></article>
-  //       // `;
-
-  //       //hozircha error messagni alert bn chiqadi
-  //       alert("Not Found, please write again");
-  //       throw Error(response.statusText);
-  //     } else {
-  //       return response.json();
-  //     }
-  //   })
-  //   .then((data) => {
-  //     let output = `<div class="message-body">
-  //     <ul>
-  //       <li><strong></strong>${data.word}</li>
-  //       <li><strong></strong>${data.definition}</li>
-  //     </ul>
-  //   </div>`;
-  //     // data.meanings.forEach((word) => {
-  //     //   output += `
-  //     //         <article class="message is-primary">
-  //     //           <div class="message-header">
-  //     //             <p>Location Info</p>
-  //     //             <button class="delete"></button>
-  //     //           </div>
-  //     //           <div class="message-body">
-  //     //             <ul>
-  //     //               <li><strong>City: </strong>${word["example"]}</li>
-  //     //               <li><strong>State: </strong>${word["definition"]}</li>
-  //     //             </ul>
-  //     //           </div>
-  //     //         </article>
-  //     //       `;
-  //     // });
-  //     // Insert into output div
-  //     document.querySelector("#output").innerHTML = output;
-  //     // console.log(data);
-  //   })
-  //   .catch((err) => console.log(err));
-
   e.preventDefault();
+}
+
+//remove word info box
+function removeBox(e) {
+  e.preventDefault();
+  if (e.target.classList.contains("delete")) {
+    document.querySelector(".message").remove();
+    document.querySelector("#myword").value = "";
+  }
 }
