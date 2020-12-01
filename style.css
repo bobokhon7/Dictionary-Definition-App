@@ -8,8 +8,17 @@
 
 .dictionary {
   font-size: 40px;
+  color: aliceblue;
 }
 
 #myword {
   border: rgb(0, 225, 255) solid;
 }
+
+/* .audio {
+  margin-left: 50px;
+  margin-bottom: 40px;
+}
+
+.audiotxt {
+  margin-top: 15px; */
